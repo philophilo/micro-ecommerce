@@ -65,6 +65,19 @@
 		</dependency>
 	</dependencies>
 
+	<repositories>
+	    <repository>
+		<id>spring-releases</id>
+		<name>Spring Releases</name>
+		<url>https://repo.spring.io/libs-release</url>
+	    </repository>
+	    <repository>
+		<id>neo4j</id>
+		<name>Neo4j</name>
+		<url>http://m2.neo4j.org/</url>
+	    </repository>
+	</repositories>
+
 	<properties>
 		<start-class>com.idugalic.recommendations.Application</start-class>
 	</properties>

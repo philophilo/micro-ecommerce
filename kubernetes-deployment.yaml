@@ -1,0 +1,391 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mongo
+  labels:
+    name: mongo
+  namespace: ecommerce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:3.0.4
+        ports:
+        - name: mongo
+          containerPort: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    name: mongo
+  namespace: ecommerce
+spec:
+  ports:
+  - port: 27017
+    targetPort: 27017
+  selector:
+    name: mongo     
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: neo4j
+  labels:
+    name: neo4j
+  namespace: ecommerce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: neo4j
+    spec:
+      containers:
+      - name: neo4j
+        image: neo4j:2.3.0
+        ports:
+        - name: mongo
+          containerPort: 7474
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: neo4j
+  labels:
+    name: neo4j
+  namespace: ecommerce
+spec:
+  ports:
+  - port: 7474
+    targetPort: 7474
+  selector:
+    name: neo4j
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ms-eureka
+  labels:
+    name: ms-eureka
+  namespace: ecommerce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: ms-eureka
+    spec:
+      containers:
+      - name: ms-eureka
+        image: philophilo/ms-eureka
+        ports:
+        - name: ms-eureka
+          containerPort: 8761
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-eureka
+  labels:
+    name: ms-eureka
+  namespace: ecommerce
+spec:
+  ports:
+  - port: 8761
+    targetPort: 8761
+  selector:
+    name: ms-eureka
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ms-authserver
+  labels:
+    name: ms-authserver
+  namespace: ecommerce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: ms-authserver
+    spec:
+      containers:
+      - name: ms-authserver
+        image: philophilo/ms-authserver
+        ports:
+        - name: ms-authserver
+          containerPort: 9999
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-authserver
+  labels:
+    name: ms-authserver
+  namespace: ecommerce
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 9999
+    targetPort: 9999
+  selector:
+    name: ms-authserver
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ms-hystrix
+  labels:
+    name: ms-hystrix
+  namespace: ecommerce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: ms-hystrix
+    spec:
+      containers:
+      - name: ms-hystrix
+        image: philophilo/ms-hystrix
+        ports:
+        - name: ms-hystrix
+          containerPort: 7979
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-hystrix
+  labels:
+    name: ms-hytrix
+  namespace: ecommerce
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 7979
+    targetPort: 7979
+  selector:
+    name: ms-hystrix
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ms-confserver
+  labels:
+    name: ms-confserver
+  namespace: ecommerce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: ms-confserver
+    spec:
+      containers:
+      - name: ms-confserver
+        image: philophilo/ms-confserver
+        ports:
+        - name: ms-confserver
+          containerPort: 8888
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-confserver
+  labels:
+    name: ms-confserver
+  namespace: ecommerce
+spec:
+  ports:
+  - port: 8888
+    targetPort: 8888
+  selector:
+    name: ms-confserver
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ms-catalog
+  labels:
+    name: ms-catalog
+  namespace: ecommerce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: ms-catalog
+    spec:
+      containers:
+      - name: ms-catalog
+        image: philophilo/ms-catalog
+        ports:
+        - name: ms-catalog
+          containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-catalog
+  labels:
+    name: ms-catalog
+  namespace: ecommerce
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8080
+    targetPort: 8080
+  selector:
+    name: ms-catalog
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ms-reviews
+  labels:
+    name: ms-reviews
+  namespace: ecommerce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: ms-reviews
+    spec:
+      containers:
+      - name: ms-reviews
+        image: philophilo/ms-reviews
+        ports:
+        - name: ms-reviews
+          containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-reviews
+  labels:
+    name: ms-reviews
+  namespace: ecommerce
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8081
+    targetPort: 8081
+  selector:
+    name: ms-reviews
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ms-recommend
+  labels:
+    name: ms-recommend
+  namespace: ecommerce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: ms-recommend
+    spec:
+      containers:
+      - name: ms-recommend
+        image: philophilo/ms-recommend
+        ports:
+        - name: ms-recommend
+          containerPort: 8082
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-recommend
+  labels:
+    name: ms-recommend
+  namespace: ecommerce
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8082
+    targetPort: 8082
+  selector:
+    name: ms-recommend
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ms-orders
+  labels:
+    name: ms-orders
+  namespace: ecommerce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: ms-orders
+    spec:
+      containers:
+      - name: ms-orders
+        image: philophilo/ms-orders
+        ports:
+        - name: ms-orders
+          containerPort: 8083
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-orders
+  labels:
+    name: ms-orders
+  namespace: ecommerce
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8083
+    targetPort: 8083
+  selector:
+    name: ms-orders
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ms-api-gateway
+  labels:
+    name: ms-api-gateway
+  namespace: ecommerce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: ms-api-gateway
+    spec:
+      containers:
+      - name: ms-api-gateway
+        image: philophilo/ms-api-gateway
+        ports:
+        - name: ms-api-gateway
+          containerPort: 9000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ms-api-gateway
+  labels:
+    name: ms-api-gateway
+  namespace: ecommerce
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 9000
+    targetPort: 9000
+  selector:
+    name: ms-api-gateway

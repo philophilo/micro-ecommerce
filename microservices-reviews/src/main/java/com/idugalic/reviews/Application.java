@@ -16,7 +16,6 @@ import com.idugalic.reviews.models.Review;
 
 @SpringBootApplication
 @EnableMongoRepositories
-@EnableDiscoveryClient
 public class Application extends RepositoryRestMvcConfiguration {
 
 	public static void main(String[] args) {

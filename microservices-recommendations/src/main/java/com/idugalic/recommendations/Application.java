@@ -13,7 +13,6 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 
 @SpringBootApplication
 @EnableNeo4jRepositories(basePackages = "com.idugalic.recommendations.repositories")
-@EnableDiscoveryClient
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Application {
 	public static void main(String[] args) {

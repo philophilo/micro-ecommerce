@@ -18,7 +18,6 @@ import com.idugalic.orders.payment.domain.Payment;
 
 @SpringBootApplication
 @EnableJpaRepositories
-@EnableDiscoveryClient
 @EnableAsync
 public class Application extends RepositoryRestMvcConfiguration {
 

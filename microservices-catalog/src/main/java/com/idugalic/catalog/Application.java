@@ -17,7 +17,6 @@ import com.idugalic.catalog.models.Product;
 
 @SpringBootApplication
 @EnableJpaRepositories
-@EnableDiscoveryClient
 public class Application
 
 {

@@ -1,0 +1,127 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: shop
+  labels:
+    name: shop
+  namespace: ecommerce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: mongo
+    spec:
+      containers:
+      - name: mongo
+        image: mongo:3.0.4
+        ports:
+        - name: mongo
+          containerPort: 27017
+      - name: neo4j
+        image: neo4j:2.3.0
+        ports:
+        - name: neo4j 
+          containerPort: 7474
+      - name: ms-eureka
+        image: philophilo/ms-eureka
+        ports:
+        - name: ms-eureka
+          containerPort: 8761
+      - name: ms-authserver
+        image: philophilo/ms-authserver
+        ports:
+        - name: ms-authserver
+          containerPort: 9999
+      - name: ms-hystrix
+        image: philophilo/ms-hystrix
+        ports:
+        - name: ms-hystrix
+          containerPort: 7979
+      - name: ms-confserver
+        image: philophilo/ms-confserver
+        ports:
+        - name: ms-confserver
+          containerPort: 8888
+      - name: ms-catalog
+        image: philophilo/ms-catalog
+        ports:
+        - name: ms-catalog
+          containerPort: 8080
+      - name: ms-reviews
+        image: philophilo/ms-reviews
+        ports:
+        - name: ms-reviews
+          containerPort: 8081
+      - name: ms-recommend
+        image: philophilo/ms-recommend
+        ports:
+        - name: ms-recommend
+          containerPort: 8082
+      - name: ms-orders
+        image: philophilo/ms-orders
+        ports:
+        - name: ms-orders
+          containerPort: 8083
+      - name: ms-api-gateway
+        image: philophilo/ms-api-gateway
+        ports:
+        - name: ms-api-gateway
+          containerPort: 9000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shop
+  labels:
+    name: shop
+  namespace: ecommerce
+spec:
+  type: LoadBalancer
+  ports:
+  - name: mongo 
+    port: 27017
+    protocol: 
+    targetPort: 27017
+  - name: neo4j 
+    port: 7474
+    protocol: 
+    targetPort: 7474
+  - name: eureka
+    port: 8761
+    protocol: 
+    targetPort: 8761
+  - name: authserver
+    port: 9999
+    protocol: 
+    targetPort: 9999
+  - name: hystrix
+    port: 7979
+    protocol: 
+    targetPort: 7979
+  - name: configserver
+    port: 8888
+    protocol: 
+    targetPort: 8888
+  - name: catalog
+    port: 8080
+    protocol: 
+    targetPort: 8080
+  - name: reviews
+    port: 8081
+    protocol: 
+    targetPort: 8081
+  - name: recommend
+    port: 8082
+    protocol: 
+    targetPort: 8082
+  - name: orders
+    port: 8083
+    protocol: 
+    targetPort: 8083
+  - name: api-gateway
+    port: 9000
+    protocol: 
+    targetPort: 9000
+  selector:
+    name: shop

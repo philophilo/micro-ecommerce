@@ -6,7 +6,7 @@ metadata:
     name: mongo
   namespace: ecommerce
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
@@ -31,7 +31,8 @@ spec:
   - port: 27017
     targetPort: 27017
   selector:
-    name: mongo     
+    name: mongo
+  type: NodePort  
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -67,6 +68,7 @@ spec:
     targetPort: 7474
   selector:
     name: neo4j
+  type: NodePort  
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -102,6 +104,7 @@ spec:
     targetPort: 8761
   selector:
     name: ms-eureka
+  type: NodePort  
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -132,12 +135,12 @@ metadata:
     name: ms-authserver
   namespace: ecommerce
 spec:
-  type: LoadBalancer
   ports:
   - port: 9999
     targetPort: 9999
   selector:
     name: ms-authserver
+  type: NodePort  
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -168,12 +171,12 @@ metadata:
     name: ms-hytrix
   namespace: ecommerce
 spec:
-  type: LoadBalancer
   ports:
   - port: 7979
     targetPort: 7979
   selector:
     name: ms-hystrix
+  type: NodePort  
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -209,6 +212,7 @@ spec:
     targetPort: 8888
   selector:
     name: ms-confserver
+  type: NodePort  
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -239,12 +243,12 @@ metadata:
     name: ms-catalog
   namespace: ecommerce
 spec:
-  type: LoadBalancer
   ports:
   - port: 8080
     targetPort: 8080
   selector:
     name: ms-catalog
+  type: NodePort  
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -275,12 +279,12 @@ metadata:
     name: ms-reviews
   namespace: ecommerce
 spec:
-  type: LoadBalancer
   ports:
   - port: 8081
     targetPort: 8081
   selector:
     name: ms-reviews
+  type: NodePort  
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -311,12 +315,12 @@ metadata:
     name: ms-recommend
   namespace: ecommerce
 spec:
-  type: LoadBalancer
   ports:
   - port: 8082
     targetPort: 8082
   selector:
     name: ms-recommend
+  type: NodePort  
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -347,12 +351,12 @@ metadata:
     name: ms-orders
   namespace: ecommerce
 spec:
-  type: LoadBalancer
   ports:
   - port: 8083
     targetPort: 8083
   selector:
     name: ms-orders
+  type: NodePort  
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -383,9 +387,66 @@ metadata:
     name: ms-api-gateway
   namespace: ecommerce
 spec:
-  type: LoadBalancer
   ports:
   - port: 9000
     targetPort: 9000
   selector:
     name: ms-api-gateway
+  type: NodePort  
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: basic-ingress
+spec:
+  backend:
+    serviceName: default-http-backend
+    servicePort: 80
+  rules:
+  - host: ing.kube.philophilo.xyz
+    http:
+      paths:
+        - path: /gateway
+          backend:
+            serviceName: ms-api-gateway
+            servicePort: 8080
+        - path: /orders
+          backend:
+            serviceName: ms-orders
+            servicePort: 8083
+        - path: /recommend
+          backend:
+            serviceName: ms-recommend
+            servicePort: 8082
+        - path: /reviews
+          backend:
+            serviceName: ms-review
+            servicePort: 8081
+        - path: /catalog
+          backend:
+            serviceName: ms-catalog
+            servicePort: 8080
+        - path: /confserver
+          backend:
+            serviceName: ms-confserver
+            serviceport: 8888
+        - path: /hystrix
+          backend:
+            serviceName: ms-hystrix
+            servicePort: 7979
+        - path: /authserver
+          backend:
+            serviceName: ms-authserver
+            servicePort: 9999
+        - path: /eureka
+          backend:
+	    serviceName: ms-eureka
+            servicePort: 8761
+        - path: /mongo
+          backend:
+            serviceName: mongo
+            servicePort: 27017
+        - path: /neo4j
+          backend:
+            serviceName: neo4j
+            servicePort: 7474

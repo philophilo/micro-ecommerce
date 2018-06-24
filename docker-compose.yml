@@ -12,6 +12,7 @@ services:
       - "7474:7474"
   eureka:
     build: microservices-eureka/.
+    image: ms-eureka 
     working_dir: /
     links:
       - config-server
@@ -19,8 +20,10 @@ services:
       - "8761:8761"
     entrypoint: ./wait-for-it.sh config-server:8888 -t 60 --
     command: java -Dspring.profiles.active=docker -jar /app.jar
+    container_name: ms-eureka
   authserver:
     build: microservices-authserver/.
+    image: ms-authserver
     working_dir: /
     links:
       - config-server
@@ -28,20 +31,26 @@ services:
       - "9999:9999"
     entrypoint: ./wait-for-it.sh config-server:8888 -t 60 --
     command: java -Dspring.profiles.active=docker -jar /app.jar
+    container_name: ms-authserver
   hystrix:
     build: microservices-hystrix-dashboard/.
+    image: ms-hystrix
     working_dir: /
     ports:
       - "7979:7979"
     entrypoint: ./wait-for-it.sh config-server:8888 -t 60 --
     command: java -Dspring.profiles.active=docker -jar /app.jar
+    container_name: ms-hystrix
   config-server:
     build: microservices-config-server/.
+    image: ms-confserver
     working_dir: /
     ports:
       - "8888:8888"
+    container_name: ms-confserver
   catalog:
     build: microservices-catalog/.
+    image: ms-catalog
     working_dir: /
     links:
       - config-server
@@ -51,8 +60,10 @@ services:
       - "8080:8080"
     entrypoint: ./wait-for-it.sh config-server:8888 -t 60 --
     command: java -Dspring.profiles.active=docker -jar /app.jar
+    container_name: ms-catalog
   reviews:
     build: microservices-reviews/.
+    image: ms-reviews
     working_dir: /
     links:
       - config-server
@@ -63,8 +74,10 @@ services:
       - "8081:8081"
     entrypoint: ./wait-for-it.sh config-server:8888 -t 60 --
     command: java -Dspring.profiles.active=docker -jar /app.jar
+    container_name: ms-reviews
   recommendations:
     build: microservices-recommendations/.
+    image: ms-recommend
     working_dir: /
     links:
       - config-server
@@ -75,8 +88,10 @@ services:
       - "8082:8082"
     entrypoint: ./wait-for-it.sh config-server:8888 -t 60 --
     command: java -Dspring.profiles.active=docker -jar /app.jar
+    container_name: ms-recommend
   orders:
     build: microservices-orders/.
+    image: ms-orders 
     working_dir: /
     links:
       - config-server
@@ -86,8 +101,10 @@ services:
       - "8083:8083"
     entrypoint: ./wait-for-it.sh config-server:8888 -t 60 --
     command: java -Dspring.profiles.active=docker -jar /app.jar
+    container_name: ms-orders
   gateway:
     build: microservices-api-gateway/.
+    image: ms-api-gateway
     working_dir: /
     links:
       - config-server
@@ -97,3 +114,4 @@ services:
       - "9000:9000"
     entrypoint: ./wait-for-it.sh config-server:8888 -t 60 --
     command: java -Dspring.profiles.active=docker -jar /app.jar
+    container_name: ms-api-gateway
